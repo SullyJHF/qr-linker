@@ -265,7 +265,9 @@
           document.getElementById("urlEditMode").style.display = "flex";
           document.getElementById("editShortHash").value = currentShortHash;
           document.getElementById("editUrlInput").value = currentOriginalUrl;
-          document.getElementById("editUrlInput").focus();
+          const inputField = document.getElementById("editUrlInput");
+          inputField.focus();
+          inputField.select();
         }
 
         function cancelEdit() {
