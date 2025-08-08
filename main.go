@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
+	"github.com/skip2/go-qrcode"
 )
 
 //go:embed templates/*.html
@@ -64,6 +65,7 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.Handle("/static/", http.FileServer(http.FS(staticFS)))
+	http.HandleFunc("/qr/", qrCodeHandler)
 	http.HandleFunc("/", publicRouteHandler)
 
 	// Protected routes
@@ -301,5 +303,45 @@ func redirectHandler(w http.ResponseWriter, r *http.Request, shortHash string) {
 	}
 
 	http.Redirect(w, r, url.FullURL, http.StatusFound)
+}
+
+func qrCodeHandler(w http.ResponseWriter, r *http.Request) {
+	// Extract the short hash from the URL path
+	shortHash := strings.TrimPrefix(r.URL.Path, "/qr/")
+	if shortHash == "" {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Check if the short URL exists in the database
+	_, err := db.GetURLByHash(shortHash)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	// Generate the full short URL
+	baseURL := os.Getenv("_INTERNAL_BASE_URL")
+	shortURL := baseURL + "/" + shortHash
+
+	// Generate QR code
+	qrCode, err := qrcode.New(shortURL, qrcode.Medium)
+	if err != nil {
+		http.Error(w, "Error generating QR code", http.StatusInternalServerError)
+		return
+	}
+
+	// Set response headers
+	w.Header().Set("Content-Type", "image/png")
+	w.Header().Set("Cache-Control", "public, max-age=3600") // Cache for 1 hour
+
+	// Write QR code as PNG
+	png, err := qrCode.PNG(256)
+	if err != nil {
+		http.Error(w, "Error generating QR code image", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(png)
 }
 

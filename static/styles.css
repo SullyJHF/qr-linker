@@ -240,6 +240,43 @@ main {
   font-style: italic;
 }
 
+.qr-code-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e1e4e8;
+  text-align: center;
+}
+
+.qr-code-section h4 {
+  color: #667eea;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.qr-code-image {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #e1e4e8;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto 10px;
+  background: white;
+}
+
+.qr-code-help {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.qr-code-table {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  background: white;
+}
+
 .features {
   background: #f8f9fa;
   border-radius: 8px;

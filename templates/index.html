@@ -49,6 +49,17 @@
                 Copy
               </button>
             </div>
+            <div class="qr-code-section">
+              <h4>QR Code:</h4>
+              <img
+                src="/qr{{.ShortURL}}"
+                alt="QR Code for {{.Host}}{{.ShortURL}}"
+                class="qr-code-image"
+              />
+              <p class="qr-code-help">
+                Scan with your phone to access the link
+              </p>
+            </div>
           </div>
           {{end}} {{if .Error}}
           <div class="error-message">
@@ -67,6 +78,7 @@
                 <th>Original URL</th>
                 <th>Clicks</th>
                 <th>Created</th>
+                <th>QR Code</th>
               </tr>
             </thead>
             <tbody>
@@ -78,6 +90,13 @@
                 <td class="truncate">{{.FullURL}}</td>
                 <td>{{.Clicks}}</td>
                 <td>{{.CreatedAt.Format "Jan 02, 2006"}}</td>
+                <td>
+                  <img
+                    src="/qr/{{.ShortHash}}"
+                    alt="QR Code"
+                    class="qr-code-table"
+                  />
+                </td>
               </tr>
               {{end}}
             </tbody>
