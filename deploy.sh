@@ -7,10 +7,15 @@ set -e
 
 # Function to use the correct docker compose command
 docker_compose() {
+    local compose_file=""
+    if [[ "${DEPLOY_MODE:-}" == "local" ]]; then
+        compose_file="-f docker-compose.local.yml"
+    fi
+    
     if command -v docker-compose &> /dev/null; then
-        docker-compose "$@"
+        docker-compose $compose_file "$@"
     else
-        docker compose "$@"
+        docker compose $compose_file "$@"
     fi
 }
 
@@ -75,14 +80,20 @@ check_environment() {
     # Source the .env file to check variables
     source .env
     
-    if [ -z "$TRAEFIK_DOMAIN" ]; then
-        log_error "TRAEFIK_DOMAIN is not set in .env file"
-        exit 1
-    fi
-    
-    if [ -z "$TRAEFIK_CERT_RESOLVER" ]; then
-        log_error "TRAEFIK_CERT_RESOLVER is not set in .env file"
-        exit 1
+    # Skip Traefik checks for local deployment
+    if [[ "${DEPLOY_MODE:-}" != "local" ]]; then
+        if [ -z "$TRAEFIK_DOMAIN" ]; then
+            log_error "TRAEFIK_DOMAIN is not set in .env file"
+            exit 1
+        fi
+        
+        if [ -z "$TRAEFIK_CERT_RESOLVER" ]; then
+            log_error "TRAEFIK_CERT_RESOLVER is not set in .env file"
+            exit 1
+        fi
+        
+        log_info "Domain: $TRAEFIK_DOMAIN"
+        log_info "Cert Resolver: $TRAEFIK_CERT_RESOLVER"
     fi
     
     if [ -z "$BASE_URL" ]; then
@@ -91,13 +102,16 @@ check_environment() {
     fi
     
     log_success "Environment configuration check passed"
-    log_info "Domain: $TRAEFIK_DOMAIN"
     log_info "Base URL: $BASE_URL"
-    log_info "Cert Resolver: $TRAEFIK_CERT_RESOLVER"
 }
 
-# Check if Traefik network exists
+# Check if Traefik network exists (only for production)
 check_traefik_network() {
+    if [[ "${DEPLOY_MODE:-}" == "local" ]]; then
+        log_info "Skipping Traefik network check for local deployment"
+        return
+    fi
+    
     log_info "Checking Traefik network..."
     
     if ! docker network ls | grep -q "traefik"; then
@@ -111,7 +125,11 @@ check_traefik_network() {
 
 # Build and deploy the application
 deploy() {
-    log_info "Starting QR Linker production deployment..."
+    if [[ "${DEPLOY_MODE:-}" == "local" ]]; then
+        log_info "Starting QR Linker local deployment..."
+    else
+        log_info "Starting QR Linker production deployment..."
+    fi
     
     # Set build version information
     log_info "Setting build version information..."
@@ -140,10 +158,15 @@ deploy() {
     log_info "Waiting for containers to be healthy..."
     sleep 15
     
-    # Health check using the domain
+    # Health check
     log_info "Performing health check..."
     source .env
-    HEALTH_URL="https://${TRAEFIK_DOMAIN}/login"
+    
+    if [[ "${DEPLOY_MODE:-}" == "local" ]]; then
+        HEALTH_URL="http://localhost:${PORT:-8080}/login"
+    else
+        HEALTH_URL="https://${TRAEFIK_DOMAIN}/login"
+    fi
     
     for i in {1..30}; do
         if curl -f -k "$HEALTH_URL" > /dev/null 2>&1; then
@@ -163,8 +186,13 @@ deploy() {
     
     # Check container status
     if docker_compose ps | grep -q "Up"; then
-        log_success "QR Linker production deployment successful!"
-        log_info "Application should be available at: https://${TRAEFIK_DOMAIN}"
+        if [[ "${DEPLOY_MODE:-}" == "local" ]]; then
+            log_success "QR Linker local deployment successful!"
+            log_info "Application should be available at: http://localhost:${PORT:-8080}"
+        else
+            log_success "QR Linker production deployment successful!"
+            log_info "Application should be available at: https://${TRAEFIK_DOMAIN}"
+        fi
         
         # Show running containers
         log_info "Running containers:"
@@ -218,7 +246,12 @@ restart() {
 health_check() {
     log_info "Performing health check..."
     source .env
-    HEALTH_URL="https://${TRAEFIK_DOMAIN}/login"
+    
+    if [[ "${DEPLOY_MODE:-}" == "local" ]]; then
+        HEALTH_URL="http://localhost:${PORT:-8080}/login"
+    else
+        HEALTH_URL="https://${TRAEFIK_DOMAIN}/login"
+    fi
     
     if curl -f -k "$HEALTH_URL" > /dev/null 2>&1; then
         log_success "QR Linker is healthy"
@@ -245,6 +278,7 @@ show_help() {
     echo
     echo "Commands:"
     echo "  deploy         Build and deploy to production (default)"
+    echo "  local          Build and deploy locally (no Traefik)"
     echo "  adduser        Add a new user interactively"
     echo "  manage-users   Open user management interface"
     echo "  logs           Show application logs"
@@ -256,6 +290,7 @@ show_help() {
     echo
     echo "Examples:"
     echo "  $0 deploy         # Deploy to production"
+    echo "  $0 local          # Deploy locally for testing"
     echo "  $0 adduser        # Add a new admin user"
     echo "  $0 logs           # Show logs"
     echo "  $0 health         # Check if application is healthy"
@@ -271,6 +306,13 @@ show_help() {
 main() {
     case "${1:-deploy}" in
         "deploy")
+            check_dependencies
+            check_environment
+            check_traefik_network
+            deploy
+            ;;
+        "local")
+            export DEPLOY_MODE="local"
             check_dependencies
             check_environment
             check_traefik_network

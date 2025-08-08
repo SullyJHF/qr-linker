@@ -13,16 +13,28 @@ import (
 
 	"qr-linker/database"
 
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/term"
 )
 
 func main() {
+	// Load environment variables from .env file if it exists
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using defaults")
+	}
+
+	// Get default database path from environment variables (same logic as main app)
+	defaultDBPath := getEnv("DB_PATH_DEV", "")
+	if defaultDBPath == "" {
+		defaultDBPath = getEnv("DB_PATH", "urls.db")
+	}
+
 	// Define command-line flags
 	var (
 		help   = flag.Bool("help", false, "Show help message")
 		h      = flag.Bool("h", false, "Show help message (shorthand)")
-		dbPath = flag.String("db", "urls.db", "Path to database file")
+		dbPath = flag.String("db", defaultDBPath, "Path to database file")
 		list   = flag.Bool("list", false, "List all users and exit")
 	)
 
@@ -329,4 +341,11 @@ func changePassword(db *database.DB) {
 	}
 	
 	fmt.Printf("✓ Password changed successfully for user '%s'.\n", username)
+}
+
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
 }

@@ -1,22 +1,16 @@
 services:
   qr-linker:
     build: .
-    container_name: qr-linker
+    container_name: qr-linker-local
     restart: unless-stopped
     environment:
       - BASE_URL=${BASE_URL:-http://localhost:8080}
       - PORT=8080
       - DB_PATH=/app/data/urls.db
+    ports:
+      - "${PORT:-8080}:8080"
     volumes:
-      - qr_linker_data:/app/data
-    networks:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.qr-linker.rule=Host(`${TRAEFIK_DOMAIN}`)"
-      - "traefik.http.routers.qr-linker.entrypoints=websecure"
-      - "traefik.http.routers.qr-linker.tls.certresolver=${TRAEFIK_CERT_RESOLVER}"
-      - "traefik.http.services.qr-linker.loadbalancer.server.port=8080"
+      - qr_linker_local_data:/app/data
     healthcheck:
       test:
         [
@@ -33,9 +27,5 @@ services:
       start_period: 40s
 
 volumes:
-  qr_linker_data:
+  qr_linker_local_data:
     driver: local
-
-networks:
-  traefik:
-    external: true
