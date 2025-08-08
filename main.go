@@ -47,7 +47,11 @@ func main() {
 	}
 
 	// Get configuration from environment variables with defaults
-	dbPath := getEnv("DB_PATH", "urls.db")
+	// Check for development DB path first, then production, then default
+	dbPath := getEnv("DB_PATH_DEV", "")
+	if dbPath == "" {
+		dbPath = getEnv("DB_PATH", "urls.db")
+	}
 	port := getEnv("PORT", "8080")
 	baseURL := getEnv("BASE_URL", "http://localhost:8080")
 

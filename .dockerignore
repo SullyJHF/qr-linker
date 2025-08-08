@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Development files
+.air.toml
+tmp/
+*.log
+
+# Database files (will be mounted as volume)
+urls.db
+urls-dev.db
+*.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation
+README.md
+CLAUDE.md
+
+# Test files
+*_test.go
+test/
+tests/
+
+# Build artifacts
+qr-linker
+qr-linker.exe
+*.exe
+*.so
+*.dylib
+
+# Nginx config (handled separately if needed)
+nginx.conf
+ssl/

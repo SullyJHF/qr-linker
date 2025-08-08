@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `air` - Run development server with hot reload (watches .go, .html, .css files)
 - `go run main.go` - Run application without hot reload
 - Server runs on `http://localhost:8080`
+- Uses `DB_PATH_DEV` environment variable for development database (default: `urls-dev.db`)
 
 ### Build
 - `go build -o qr-linker .` - Build production binary with embedded assets
