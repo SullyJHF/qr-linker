@@ -370,6 +370,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  box-sizing: border-box;
 }
 
 .info-row strong {
@@ -423,12 +424,18 @@ main {
 
 .original-url {
   background: #f8f9fa;
-  padding: 12px 15px;
+  padding: 13px 15px;
   border-radius: 8px;
-  border: 1px solid #e1e4e8;
+  border: 2px solid #e1e4e8;
   word-break: break-all;
   font-size: 0.95rem;
   color: #555;
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  line-height: 24px;
 }
 
 .modal-qr {
@@ -485,16 +492,24 @@ main {
 .edit-url-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .edit-url-input {
-  padding: 12px 15px;
+  padding: 13px 15px;
   font-size: 0.95rem;
   border: 2px solid #e1e4e8;
   border-radius: 8px;
   transition: border-color 0.3s ease;
   font-family: inherit;
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  background: #f8f9fa;
+  line-height: 24px;
+  margin: 0;
 }
 
 .edit-url-input:focus {
@@ -552,7 +567,14 @@ main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#urlEditMode {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #urlDisplayMode .original-url {
