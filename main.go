@@ -48,9 +48,9 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.Handle("/static/", http.FileServer(http.FS(staticFS)))
+	http.HandleFunc("/", publicRouteHandler)
 
 	// Protected routes
-	http.HandleFunc("/", auth.RequireAuth(routeHandler))
 	http.HandleFunc("/shorten", auth.RequireAuth(shortenHandler))
 
 	log.Println("Server starting on http://localhost:8080")
@@ -59,14 +59,20 @@ func main() {
 	}
 }
 
-func routeHandler(w http.ResponseWriter, r *http.Request) {
+func publicRouteHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	
 	if path == "/" {
+		// Homepage requires authentication
+		if !auth.IsAuthenticated(r) {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 		homeHandler(w, r)
 		return
 	}
 	
+	// Short URL redirects are public
 	shortHash := strings.TrimPrefix(path, "/")
 	if shortHash != "" {
 		redirectHandler(w, r, shortHash)
