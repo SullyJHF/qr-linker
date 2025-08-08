@@ -220,7 +220,7 @@
           document.getElementById("modalQrCode").src = "/qr/" + shortHash;
 
           // Reset to display mode
-          document.getElementById("urlDisplayMode").style.display = "block";
+          document.getElementById("urlDisplayMode").style.display = "flex";
           document.getElementById("urlEditMode").style.display = "none";
 
           // Disable background scrolling
@@ -254,14 +254,14 @@
 
         function enableEditMode() {
           document.getElementById("urlDisplayMode").style.display = "none";
-          document.getElementById("urlEditMode").style.display = "block";
+          document.getElementById("urlEditMode").style.display = "flex";
           document.getElementById("editShortHash").value = currentShortHash;
           document.getElementById("editUrlInput").value = currentOriginalUrl;
           document.getElementById("editUrlInput").focus();
         }
 
         function cancelEdit() {
-          document.getElementById("urlDisplayMode").style.display = "block";
+          document.getElementById("urlDisplayMode").style.display = "flex";
           document.getElementById("urlEditMode").style.display = "none";
           document.getElementById("updateSuccess").style.display = "none";
         }
@@ -306,7 +306,7 @@
               document.getElementById("modalOriginalUrl").textContent = newUrl;
               
               // Switch back to display mode immediately
-              document.getElementById("urlDisplayMode").style.display = "block";
+              document.getElementById("urlDisplayMode").style.display = "flex";
               document.getElementById("urlEditMode").style.display = "none";
               
               // Show success message

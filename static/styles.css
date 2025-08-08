@@ -492,7 +492,7 @@ main {
 .edit-url-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -567,7 +567,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -575,6 +575,10 @@ main {
 #urlEditMode {
   width: 100%;
   box-sizing: border-box;
+}
+
+#urlEditMode form {
+  width: 100%;
 }
 
 #urlDisplayMode .original-url {
@@ -648,6 +652,11 @@ main {
 
   .edit-buttons {
     flex-direction: column;
+    width: 100%;
+  }
+
+  .edit-buttons button {
+    width: 100%;
   }
 }
 
