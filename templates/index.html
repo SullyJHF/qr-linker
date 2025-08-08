@@ -130,7 +130,26 @@
               </div>
               <div class="info-row">
                 <strong>Original URL:</strong>
-                <div class="original-url" id="modalOriginalUrl"></div>
+                <div id="urlDisplayMode">
+                  <div class="original-url" id="modalOriginalUrl"></div>
+                  <button onclick="enableEditMode()" class="btn-edit">Edit</button>
+                </div>
+                <div id="updateSuccess" class="update-success" style="display: none;">
+                  <span class="success-icon">✓</span>
+                  <span>Successfully updated!</span>
+                </div>
+                <div id="urlEditMode" style="display: none;">
+                  <form id="updateUrlForm" onsubmit="updateUrl(event)">
+                    <div class="edit-url-container">
+                      <input type="hidden" id="editShortHash" name="short_hash">
+                      <input type="url" id="editUrlInput" name="new_url" class="edit-url-input" placeholder="https://example.com" required>
+                      <div class="edit-buttons">
+                        <button type="submit" class="btn-save">Save</button>
+                        <button type="button" onclick="cancelEdit()" class="btn-cancel">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
               <div class="info-row">
                 <strong>Clicks:</strong>
@@ -181,8 +200,15 @@
         const modal = document.getElementById("urlModal");
         const closeBtn = document.getElementsByClassName("close")[0];
 
+        let currentShortHash = "";
+        let currentOriginalUrl = "";
+        
         function showModal(shortHash, originalUrl, clicks, created, baseUrl) {
           const shortUrl = baseUrl + "/" + shortHash;
+          
+          // Store current values
+          currentShortHash = shortHash;
+          currentOriginalUrl = originalUrl;
 
           const modalShortUrlElement = document.getElementById("modalShortUrl");
           modalShortUrlElement.textContent = shortUrl;
@@ -192,6 +218,10 @@
           document.getElementById("modalClicks").textContent = clicks;
           document.getElementById("modalCreated").textContent = created;
           document.getElementById("modalQrCode").src = "/qr/" + shortHash;
+
+          // Reset to display mode
+          document.getElementById("urlDisplayMode").style.display = "block";
+          document.getElementById("urlEditMode").style.display = "none";
 
           // Disable background scrolling
           document.body.style.overflow = "hidden";
@@ -221,6 +251,85 @@
             closeModal();
           }
         });
+
+        function enableEditMode() {
+          document.getElementById("urlDisplayMode").style.display = "none";
+          document.getElementById("urlEditMode").style.display = "block";
+          document.getElementById("editShortHash").value = currentShortHash;
+          document.getElementById("editUrlInput").value = currentOriginalUrl;
+          document.getElementById("editUrlInput").focus();
+        }
+
+        function cancelEdit() {
+          document.getElementById("urlDisplayMode").style.display = "block";
+          document.getElementById("urlEditMode").style.display = "none";
+          document.getElementById("updateSuccess").style.display = "none";
+        }
+
+        function updateUrl(event) {
+          event.preventDefault();
+          
+          const formData = new FormData(event.target);
+          const saveButton = event.target.querySelector(".btn-save");
+          const cancelButton = event.target.querySelector(".btn-cancel");
+          const originalSaveText = saveButton.textContent;
+          
+          // Disable both buttons during request
+          saveButton.textContent = "Saving...";
+          saveButton.disabled = true;
+          cancelButton.disabled = true;
+
+          // Convert FormData to URLSearchParams for proper form encoding
+          const params = new URLSearchParams();
+          for (const [key, value] of formData.entries()) {
+            params.append(key, value);
+          }
+
+          fetch("/update", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to update URL");
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.success) {
+              // Update the display with the new URL
+              const newUrl = params.get("new_url");
+              currentOriginalUrl = newUrl;
+              document.getElementById("modalOriginalUrl").textContent = newUrl;
+              
+              // Switch back to display mode immediately
+              document.getElementById("urlDisplayMode").style.display = "block";
+              document.getElementById("urlEditMode").style.display = "none";
+              
+              // Show success message
+              const successDiv = document.getElementById("updateSuccess");
+              successDiv.style.display = "flex";
+              
+              // Hide success message after 2 seconds
+              setTimeout(() => {
+                successDiv.style.display = "none";
+              }, 2000);
+            } else {
+              throw new Error("Update failed");
+            }
+          })
+          .catch(error => {
+            console.error("Error updating URL:", error);
+            alert("Failed to update URL. Please try again.");
+            // Re-enable buttons on error
+            saveButton.textContent = originalSaveText;
+            saveButton.disabled = false;
+            cancelButton.disabled = false;
+          });
+        }
       </script>
 
       <footer>

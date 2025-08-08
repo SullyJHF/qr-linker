@@ -466,6 +466,130 @@ main {
   background-color: #f0f9ff !important;
 }
 
+/* Edit form styles */
+.btn-edit {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.btn-edit:hover {
+  background: #218838;
+}
+
+.edit-url-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.edit-url-input {
+  padding: 12px 15px;
+  font-size: 0.95rem;
+  border: 2px solid #e1e4e8;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.edit-url-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-save {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+  min-width: 70px;
+}
+
+.btn-save:hover:not(:disabled) {
+  background: #764ba2;
+}
+
+.btn-save:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.btn-cancel:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+#urlDisplayMode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+#urlDisplayMode .original-url {
+  width: 100%;
+}
+
+/* Success message styles */
+.update-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  animation: fadeInSuccess 0.3s ease;
+}
+
+.success-icon {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #28a745;
+}
+
+@keyframes fadeInSuccess {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Mobile responsive modal */
 @media (max-width: 768px) {
   .modal-content {
@@ -492,6 +616,16 @@ main {
   .url-display {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  #urlDisplayMode {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .edit-buttons {
+    flex-direction: column;
   }
 }
 

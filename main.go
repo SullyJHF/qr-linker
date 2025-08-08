@@ -70,6 +70,7 @@ func main() {
 
 	// Protected routes
 	http.HandleFunc("/shorten", auth.RequireAuth(shortenHandler))
+	http.HandleFunc("/update", auth.RequireAuth(updateHandler))
 
 	log.Printf("Server starting on %s (port %s)", baseURL, port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
@@ -343,5 +344,49 @@ func qrCodeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write(png)
+}
+
+func updateHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Invalid form data", http.StatusBadRequest)
+		return
+	}
+
+	shortHash := r.FormValue("short_hash")
+	newURL := r.FormValue("new_url")
+
+	if shortHash == "" || newURL == "" {
+		http.Error(w, "Short hash and new URL are required", http.StatusBadRequest)
+		return
+	}
+
+	// Add protocol if missing
+	if !strings.HasPrefix(newURL, "http://") && !strings.HasPrefix(newURL, "https://") {
+		newURL = "https://" + newURL
+	}
+
+	// Check if URL exists
+	_, err = db.GetURLByHash(shortHash)
+	if err != nil {
+		http.Error(w, "URL not found", http.StatusNotFound)
+		return
+	}
+
+	// Update the URL
+	err = db.UpdateURL(shortHash, newURL)
+	if err != nil {
+		log.Printf("Error updating URL: %v", err)
+		http.Error(w, "Failed to update URL", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"success": true}`))
 }
 

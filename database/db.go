@@ -290,3 +290,9 @@ func (db *DB) UpdateUserPassword(id int, passwordHash string) error {
 	_, err := db.conn.Exec(query, passwordHash, id)
 	return err
 }
+
+func (db *DB) UpdateURL(shortHash, newFullURL string) error {
+	query := `UPDATE urls SET full_url = ? WHERE short_hash = ?`
+	_, err := db.conn.Exec(query, newFullURL, shortHash)
+	return err
+}
