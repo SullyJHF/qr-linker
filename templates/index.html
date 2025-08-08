@@ -38,7 +38,8 @@
           </form>
 
           {{if .ShortURL}}
-          <div class="result-card">
+          <div class="result-card" id="successCard">
+            <button class="close-success" onclick="closeSuccess()" title="Close">&times;</button>
             <h3>Success! Your short URL is:</h3>
             <div class="short-url-display">
               <a href="{{.ShortURL}}" target="_blank">{{.Host}}{{.ShortURL}}</a>
@@ -251,6 +252,13 @@
             closeModal();
           }
         });
+
+        function closeSuccess() {
+          const successCard = document.getElementById("successCard");
+          if (successCard) {
+            successCard.style.display = "none";
+          }
+        }
 
         function enableEditMode() {
           document.getElementById("urlDisplayMode").style.display = "none";
