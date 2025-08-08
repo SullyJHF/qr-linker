@@ -6,10 +6,13 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"qr-linker/auth"
 	"qr-linker/database"
 	"qr-linker/utils"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 //go:embed templates/*.html
@@ -37,12 +40,25 @@ type LoginData struct {
 var db *database.DB
 
 func main() {
+	// Load environment variables from .env file if it exists
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using defaults")
+	}
+
+	// Get configuration from environment variables with defaults
+	dbPath := getEnv("DB_PATH", "urls.db")
+	port := getEnv("PORT", "8080")
+	baseURL := getEnv("BASE_URL", "http://localhost:8080")
+
 	var err error
-	db, err = database.NewDB("urls.db")
+	db, err = database.NewDB(dbPath)
 	if err != nil {
 		log.Fatal("Failed to initialize database:", err)
 	}
 	defer db.Close()
+
+	// Store base URL globally for use in handlers
+	os.Setenv("_INTERNAL_BASE_URL", baseURL)
 
 	// Public routes
 	http.HandleFunc("/login", loginHandler)
@@ -53,10 +69,17 @@ func main() {
 	// Protected routes
 	http.HandleFunc("/shorten", auth.RequireAuth(shortenHandler))
 
-	log.Println("Server starting on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	log.Printf("Server starting on %s (port %s)", baseURL, port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
 }
 
 func publicRouteHandler(w http.ResponseWriter, r *http.Request) {
@@ -107,7 +130,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{
 		Title:    "QR Linker - URL Shortener",
 		URLs:     urls,
-		Host:     "http://localhost:8080",
+		Host:     os.Getenv("_INTERNAL_BASE_URL"),
 		Username: username,
 	}
 

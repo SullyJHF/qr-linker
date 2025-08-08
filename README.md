@@ -29,8 +29,12 @@ cd qr-linker
 # Install dependencies
 go mod download
 
+# Configure the application (optional)
+cp .env.example .env
+# Edit .env with your preferred settings
+
 # Build the application
-make build
+go build -o qr-linker .
 ```
 
 ### Running the Application
@@ -94,9 +98,37 @@ On first run, the application creates a default admin user:
 
 **Important:** Change the default password immediately after first login!
 
+## Configuration
+
+The application can be configured using environment variables or a `.env` file.
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BASE_URL` | `http://localhost:8080` | Base URL for displaying short URLs in the interface |
+| `PORT` | `8080` | Port the server listens on |
+| `DB_PATH` | `urls.db` | Path to the SQLite database file |
+
+### Setup for Production
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your production values:
+   ```bash
+   BASE_URL=https://yourdomain.com
+   PORT=3000
+   DB_PATH=/var/data/urls.db
+   ```
+
+3. The `BASE_URL` is crucial - it's used to display the correct short URLs in the web interface.
+
 ## Database
 
-The application uses SQLite and stores data in `urls.db` in the project root. The database is created automatically on first run.
+The application uses SQLite and stores data in the configured database path (default: `urls.db`). The database is created automatically on first run.
 
 ### Database Schema
 
