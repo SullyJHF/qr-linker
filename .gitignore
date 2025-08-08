@@ -1,2 +1,28 @@
+# Database files
+*.db
+urls.db
+
+# Build artifacts
 tmp/
+qr-linker
+
+# Claude Code settings
 .claude/settings.local.json
+
+# Go build cache
+.cache/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.local

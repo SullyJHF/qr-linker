@@ -77,6 +77,11 @@ func routeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	// Set cache-control headers to prevent caching of dynamic content
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+	w.Header().Set("Pragma", "no-cache")
+	w.Header().Set("Expires", "0")
+	
 	tmpl, err := template.ParseFS(templatesFS, "templates/index.html")
 	if err != nil {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
@@ -250,6 +255,11 @@ func shortenHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request, shortHash string) {
+	// Set cache-control headers to prevent any caching of the redirect
+	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0")
+	w.Header().Set("Pragma", "no-cache")
+	w.Header().Set("Expires", "Thu, 01 Jan 1970 00:00:00 GMT")
+	
 	url, err := db.GetURLByHash(shortHash)
 	if err != nil {
 		http.NotFound(w, r)
@@ -261,6 +271,6 @@ func redirectHandler(w http.ResponseWriter, r *http.Request, shortHash string) {
 		log.Printf("Error incrementing clicks: %v", err)
 	}
 
-	http.Redirect(w, r, url.FullURL, http.StatusMovedPermanently)
+	http.Redirect(w, r, url.FullURL, http.StatusFound)
 }
 
