@@ -44,13 +44,6 @@ func main() {
 	}
 	defer db.Close()
 
-	// Create default admin user if none exists
-	if err := auth.CreateDefaultUser(db); err != nil {
-		log.Printf("Warning: Could not create default user: %v", err)
-	} else {
-		log.Println("Default admin user created (username: admin, password: admin123)")
-	}
-
 	// Public routes
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
@@ -61,7 +54,6 @@ func main() {
 	http.HandleFunc("/shorten", auth.RequireAuth(shortenHandler))
 
 	log.Println("Server starting on http://localhost:8080")
-	log.Println("Default credentials - Username: admin, Password: admin123")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}

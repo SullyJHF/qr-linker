@@ -247,3 +247,46 @@ func (db *DB) GetUserByID(id int) (*User, error) {
 
 	return &user, nil
 }
+
+func (db *DB) GetAllUsers() ([]User, error) {
+	query := `
+		SELECT id, username, password_hash, created_at
+		FROM users
+		ORDER BY created_at DESC
+	`
+
+	rows, err := db.conn.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		var user User
+		err := rows.Scan(
+			&user.ID,
+			&user.Username,
+			&user.PasswordHash,
+			&user.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (db *DB) DeleteUser(id int) error {
+	query := `DELETE FROM users WHERE id = ?`
+	_, err := db.conn.Exec(query, id)
+	return err
+}
+
+func (db *DB) UpdateUserPassword(id int, passwordHash string) error {
+	query := `UPDATE users SET password_hash = ? WHERE id = ?`
+	_, err := db.conn.Exec(query, passwordHash, id)
+	return err
+}

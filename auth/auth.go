@@ -2,7 +2,6 @@ package auth
 
 import (
 	"net/http"
-	"qr-linker/database"
 
 	"github.com/gorilla/sessions"
 	"golang.org/x/crypto/bcrypt"
@@ -101,21 +100,3 @@ func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func CreateDefaultUser(db *database.DB) error {
-	// Check if admin user exists
-	_, err := db.GetUserByUsername("admin")
-	if err == nil {
-		// User already exists
-		return nil
-	}
-
-	// Create default admin user with password "admin123"
-	// You should change this password immediately after first login
-	hashedPassword, err := HashPassword("admin123")
-	if err != nil {
-		return err
-	}
-
-	_, err = db.CreateUser("admin", hashedPassword)
-	return err
-}
