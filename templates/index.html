@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>{{.Title}}</h1>
+      </header>
+
+      <main>
+        <div class="welcome-card">
+          <h2>{{.Message}}</h2>
+          <p>This is a simple Go HTTP server serving HTML with CSS styling.</p>
+          <div class="features">
+            <h3>Features:</h3>
+            <ul>
+              <li>Built with Go standard library</li>
+              <li>Embedded templates and static files</li>
+              <li>Clean and responsive design</li>
+              <li>Ready for expansion</li>
+            </ul>
+          </div>
+          <button class="btn-primary">Get Started</button>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 QR Linker.</p>
+      </footer>
+    </div>
+  </body>
+</html>
