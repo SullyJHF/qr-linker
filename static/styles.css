@@ -10,7 +10,7 @@ body {
     Arial, sans-serif;
   line-height: 1.6;
   color: #333;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bca3ac 0%, #e5cedc 100%);
   min-height: 100vh;
 }
 
@@ -31,7 +31,7 @@ header {
 }
 
 header h1 {
-  color: white;
+  color: #f3eaf4;
   font-size: 3rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   animation: fadeInDown 0.8s ease;
@@ -88,7 +88,7 @@ main {
 }
 
 .url-shortener-card h2 {
-  color: #667eea;
+  color: #8f9491;
   margin-bottom: 10px;
   font-size: 1.8rem;
   text-align: center;
@@ -110,19 +110,19 @@ main {
   flex: 1;
   padding: 12px 16px;
   font-size: 1rem;
-  border: 2px solid #e1e4e8;
+  border: 2px solid #eadde1;
   border-radius: 8px;
   transition: border-color 0.3s ease;
 }
 
 .url-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #bca3ac;
 }
 
 .result-card {
-  background: #f0f9ff;
-  border: 2px solid #667eea;
+  background: #f3eaf4;
+  border: 2px solid #bca3ac;
   border-radius: 8px;
   padding: 20px;
   margin-top: 20px;
@@ -142,18 +142,18 @@ main {
   background: white;
   padding: 10px 15px;
   border-radius: 6px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid #eadde1;
 }
 
 .short-url-display a {
-  color: #667eea;
+  color: #8f9491;
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1rem;
 }
 
 .btn-copy {
-  background: #667eea;
+  background: #bca3ac;
   color: white;
   border: none;
   padding: 8px 4px;
@@ -165,7 +165,7 @@ main {
 }
 
 .btn-copy:hover {
-  background: #764ba2;
+  background: #8f9491;
 }
 
 .error-message {
@@ -189,7 +189,7 @@ main {
 }
 
 .recent-urls h3 {
-  color: #667eea;
+  color: #8f9491;
   margin-bottom: 20px;
   font-size: 1.5rem;
 }
@@ -200,24 +200,24 @@ main {
 }
 
 .url-table th {
-  background: #f8f9fa;
-  color: #764ba2;
+  background: #f3eaf4;
+  color: #8f9491;
   padding: 12px;
   text-align: left;
-  border-bottom: 2px solid #e1e4e8;
+  border-bottom: 2px solid #eadde1;
 }
 
 .url-table td {
   padding: 12px;
-  border-bottom: 1px solid #e1e4e8;
+  border-bottom: 1px solid #eadde1;
 }
 
 .url-table tr:hover {
-  background: #f8f9fa;
+  background: #f3eaf4;
 }
 
 .url-table a {
-  color: #667eea;
+  color: #8f9491;
   text-decoration: none;
   font-family: monospace;
 }
@@ -248,7 +248,7 @@ main {
 }
 
 .qr-code-section h4 {
-  color: #667eea;
+  color: #8f9491;
   margin-bottom: 15px;
   font-size: 1.1rem;
 }
@@ -256,7 +256,7 @@ main {
 .qr-code-image {
   width: 200px;
   height: 200px;
-  border: 2px solid #e1e4e8;
+  border: 2px solid #eadde1;
   border-radius: 8px;
   display: block;
   margin: 0 auto 10px;
@@ -272,7 +272,7 @@ main {
 .qr-code-table {
   width: 40px;
   height: 40px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid #eadde1;
   border-radius: 4px;
   background: white;
 }
@@ -317,7 +317,7 @@ main {
 }
 
 .modal-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bca3ac 0%, #e5cedc 100%);
   color: white;
   padding: 20px 30px;
   display: flex;
@@ -374,7 +374,7 @@ main {
 }
 
 .info-row strong {
-  color: #667eea;
+  color: #8f9491;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -384,16 +384,16 @@ main {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #f8f9fa;
+  background: #f3eaf4;
   padding: 12px 15px;
   border-radius: 8px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid #eadde1;
 }
 
 .url-display a {
   font-family: monospace;
   font-weight: bold;
-  color: #667eea;
+  color: #8f9491;
   flex: 1;
   word-break: break-all;
   text-decoration: none;
@@ -401,12 +401,12 @@ main {
 }
 
 .url-display a:hover {
-  color: #764ba2;
+  color: #bca3ac;
   text-decoration: underline;
 }
 
 .btn-copy-modal {
-  background: #667eea;
+  background: #bca3ac;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -419,14 +419,14 @@ main {
 }
 
 .btn-copy-modal:hover {
-  background: #764ba2;
+  background: #8f9491;
 }
 
 .original-url {
-  background: #f8f9fa;
+  background: #f3eaf4;
   padding: 13px 15px;
   border-radius: 8px;
-  border: 2px solid #e1e4e8;
+  border: 2px solid #eadde1;
   word-break: break-all;
   font-size: 0.95rem;
   color: #555;
@@ -440,14 +440,14 @@ main {
 
 .modal-qr {
   text-align: center;
-  background: #f8f9fa;
+  background: #f3eaf4;
   padding: 25px;
   border-radius: 12px;
-  border: 2px solid #e1e4e8;
+  border: 2px solid #eadde1;
 }
 
 .modal-qr h3 {
-  color: #667eea;
+  color: #8f9491;
   margin: 0 0 15px 0;
   font-size: 1.2rem;
 }
@@ -470,12 +470,12 @@ main {
 }
 
 .clickable-row:hover {
-  background-color: #f0f9ff !important;
+  background-color: #f3eaf4 !important;
 }
 
 /* Edit form styles */
 .btn-edit {
-  background: #28a745;
+  background: #bca3ac;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -486,7 +486,7 @@ main {
 }
 
 .btn-edit:hover {
-  background: #218838;
+  background: #8f9491;
 }
 
 .edit-url-container {
@@ -500,21 +500,21 @@ main {
 .edit-url-input {
   padding: 13px 15px;
   font-size: 0.95rem;
-  border: 2px solid #e1e4e8;
+  border: 2px solid #eadde1;
   border-radius: 8px;
   transition: border-color 0.3s ease;
   font-family: inherit;
   box-sizing: border-box;
   width: 100%;
   height: 50px;
-  background: #f8f9fa;
+  background: #f3eaf4;
   line-height: 24px;
   margin: 0;
 }
 
 .edit-url-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #bca3ac;
 }
 
 .edit-buttons {
@@ -523,7 +523,7 @@ main {
 }
 
 .btn-save {
-  background: #667eea;
+  background: #bca3ac;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -535,7 +535,7 @@ main {
 }
 
 .btn-save:hover:not(:disabled) {
-  background: #764ba2;
+  background: #8f9491;
 }
 
 .btn-save:disabled {
@@ -544,7 +544,7 @@ main {
 }
 
 .btn-cancel {
-  background: #6c757d;
+  background: #8f9491;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -555,7 +555,7 @@ main {
 }
 
 .btn-cancel:hover:not(:disabled) {
-  background: #5a6268;
+  background: #6c757d;
 }
 
 .btn-cancel:disabled {
@@ -683,7 +683,7 @@ main {
 }
 
 .features h3 {
-  color: #764ba2;
+  color: #8f9491;
   margin-bottom: 15px;
 }
 
@@ -698,7 +698,7 @@ main {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #bca3ac 0%, #e5cedc 100%);
   color: white;
   border: none;
   padding: 12px 30px;
@@ -712,7 +712,7 @@ main {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 20px rgba(188, 163, 172, 0.4);
 }
 
 footer {
@@ -762,7 +762,7 @@ footer {
 }
 
 .login-card h2 {
-  color: #667eea;
+  color: #8f9491;
   margin-bottom: 10px;
   font-size: 2rem;
   text-align: center;
@@ -789,14 +789,14 @@ footer {
   width: 100%;
   padding: 12px 16px;
   font-size: 1rem;
-  border: 2px solid #e1e4e8;
+  border: 2px solid #eadde1;
   border-radius: 8px;
   transition: border-color 0.3s ease;
 }
 
 .login-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #bca3ac;
 }
 
 .btn-login {
