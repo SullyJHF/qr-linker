@@ -1,0 +1,51 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.23"
+          cache: true
+
+      - name: Test application
+        run: |
+          go mod tidy
+          go test -v ./...
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || '22' }}
+          script: |
+            cd ~/qr-linker
+            git fetch origin
+            git reset --hard origin/main
+            ./deploy.sh deploy
+
+      - name: Health Check
+        run: |
+          sleep 30
+          curl -f https://${{ secrets.DOMAIN }}/login || exit 1
+
+      - name: Notify on success
+        if: success()
+        run: echo "🎉 Deployment to ${{ secrets.DOMAIN }} successful!"
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "❌ Deployment failed!"

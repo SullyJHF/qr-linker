@@ -153,6 +153,98 @@ For high-traffic deployments:
 3. **Caching**: Add Redis for session storage
 4. **CDN**: Use a CDN for static assets
 
+## GitHub Actions CI/CD
+
+The repository includes a GitHub Actions workflow for automatic deployment to your VPS when you push to the main branch.
+
+### Setup GitHub Secrets
+
+Configure these secrets in your GitHub repository settings (Settings → Secrets and variables → Actions):
+
+| Secret Name | Description | Example Value |
+|-------------|-------------|---------------|
+| `VPS_HOST` | IP address or hostname of your VPS | `123.456.789.012` or `server.yourdomain.com` |
+| `VPS_USERNAME` | SSH username for your VPS | `root` or `deploy` |
+| `VPS_SSH_KEY` | Private SSH key for VPS access | Contents of your `~/.ssh/id_rsa` file |
+| `VPS_PORT` | SSH port (optional, defaults to 22) | `22` |
+| `DOMAIN` | Your application domain for health checks | `links.yourdomain.com` |
+
+### SSH Key Setup
+
+1. **Generate SSH key pair** (if you don't have one):
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "github-actions@yourdomain.com"
+   ```
+
+2. **Copy public key to your VPS**:
+   ```bash
+   ssh-copy-id -i ~/.ssh/id_rsa.pub username@your-vps-ip
+   ```
+
+3. **Add private key to GitHub secrets**:
+   ```bash
+   # Copy the ENTIRE private key including headers
+   cat ~/.ssh/id_rsa
+   ```
+   Copy the complete output and paste it as the `VPS_SSH_KEY` secret.
+
+### VPS Preparation
+
+On your VPS, ensure:
+
+1. **Repository is cloned**:
+   ```bash
+   cd ~
+   git clone https://github.com/yourusername/qr-linker.git
+   cd qr-linker
+   ```
+
+2. **Environment configured**:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your production settings
+   ```
+
+3. **Deploy script is executable**:
+   ```bash
+   chmod +x deploy.sh
+   ```
+
+4. **Docker and Traefik are running**:
+   ```bash
+   # Ensure Docker is installed and running
+   docker --version
+   docker-compose --version
+   
+   # Ensure Traefik network exists
+   docker network ls | grep traefik
+   ```
+
+### Workflow Behavior
+
+The GitHub Actions workflow:
+
+1. **Triggers** on push to `main` branch or manual workflow dispatch
+2. **Tests** the Go application with `go test`
+3. **Deploys** by SSH'ing to your VPS and running `./deploy.sh deploy`
+4. **Health checks** your deployed application
+5. **Notifies** success or failure
+
+### Manual Deployment
+
+You can also trigger deployment manually:
+- Go to your GitHub repository
+- Click "Actions" tab
+- Select "Deploy to VPS" workflow
+- Click "Run workflow" → "Run workflow"
+
+### Workflow Logs
+
+View deployment logs in GitHub:
+- Repository → Actions → Click on a workflow run
+- Expand steps to see detailed output
+- Check "Deploy to VPS" step for deployment details
+
 ## Troubleshooting
 
 ### Container won't start:
@@ -169,6 +261,23 @@ docker-compose exec qr-linker ls -la /app/data/
 ```bash
 docker-compose logs nginx
 ```
+
+### GitHub Actions deployment fails:
+
+1. **SSH connection issues**:
+   - Verify `VPS_HOST`, `VPS_USERNAME`, `VPS_PORT` secrets
+   - Ensure SSH key has correct permissions
+   - Test SSH connection manually: `ssh username@vps-host`
+
+2. **Deployment script fails**:
+   - Check VPS has Docker and docker-compose installed
+   - Verify Traefik is running and network exists
+   - Ensure .env file is properly configured on VPS
+
+3. **Health check fails**:
+   - Verify `DOMAIN` secret matches your actual domain
+   - Check if SSL certificate is properly configured
+   - Ensure application is accessible at `/login` endpoint
 
 ### Reset everything:
 ```bash
