@@ -1,3 +1,31 @@
+:root {
+  /* Color Palette */
+  --color-primary: #8f9491; /* Gray-green - primary text, headings */
+  --color-secondary: #bca3ac; /* Dusty rose - buttons, focus states */
+  --color-tertiary: #e5cedc; /* Light pink - gradient end */
+  --color-light: #f3eaf4; /* Very light pink - backgrounds */
+  --color-border: #eadde1; /* Soft pink - borders */
+
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-text: #333333;
+  --color-text-muted: #666666;
+  --color-text-light: #555555;
+  --color-disabled: #cccccc;
+  --color-hover-dark: #6c757d;
+
+  /* Semantic Colors */
+  --color-error-bg: #fee;
+  --color-error-border: #f88;
+  --color-error-text: #c00;
+  --color-success-bg: #d4edda;
+  --color-success-border: #c3e6cb;
+  --color-success-text: #155724;
+  --color-success-icon: #28a745;
+  --color-logout: #dc3545;
+  --color-logout-hover: #c82333;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -9,8 +37,12 @@ body {
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
   line-height: 1.6;
-  color: #333;
-  background: linear-gradient(135deg, #bca3ac 0%, #e5cedc 100%);
+  color: var(--color-text);
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary) 0%,
+    var(--color-tertiary) 100%
+  );
   min-height: 100vh;
 }
 
@@ -31,7 +63,7 @@ header {
 }
 
 header h1 {
-  color: #f3eaf4;
+  color: var(--color-light);
   font-size: 3rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   animation: fadeInDown 0.8s ease;
@@ -51,12 +83,12 @@ header h1 {
 }
 
 .user-info span {
-  color: #333;
+  color: var(--color-text);
 }
 
 .btn-logout {
-  background: #dc3545;
-  color: white;
+  background: var(--color-logout);
+  color: var(--color-white);
   text-decoration: none;
   padding: 8px 16px;
   border-radius: 20px;
@@ -64,7 +96,7 @@ header h1 {
 }
 
 .btn-logout:hover {
-  background: #c82333;
+  background: var(--color-logout-hover);
 }
 
 main {
@@ -77,7 +109,7 @@ main {
 }
 
 .url-shortener-card {
-  background: white;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 40px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -88,14 +120,14 @@ main {
 }
 
 .url-shortener-card h2 {
-  color: #8f9491;
+  color: var(--color-primary);
   margin-bottom: 10px;
   font-size: 1.8rem;
   text-align: center;
 }
 
 .url-shortener-card > p {
-  color: #666;
+  color: var(--color-text-muted);
   margin-bottom: 30px;
   text-align: center;
 }
@@ -110,19 +142,19 @@ main {
   flex: 1;
   padding: 12px 16px;
   font-size: 1rem;
-  border: 2px solid #eadde1;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   transition: border-color 0.3s ease;
 }
 
 .url-input:focus {
   outline: none;
-  border-color: #bca3ac;
+  border-color: var(--color-secondary);
 }
 
 .result-card {
-  background: #f3eaf4;
-  border: 2px solid #bca3ac;
+  background: var(--color-light);
+  border: 2px solid var(--color-secondary);
   border-radius: 8px;
   padding: 20px;
   margin-top: 20px;
@@ -130,7 +162,7 @@ main {
 }
 
 .result-card h3 {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 15px;
 }
 
@@ -139,22 +171,22 @@ main {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: white;
+  background: var(--color-white);
   padding: 10px 15px;
   border-radius: 6px;
-  border: 1px solid #eadde1;
+  border: 1px solid var(--color-border);
 }
 
 .short-url-display a {
-  color: #8f9491;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1rem;
 }
 
 .btn-copy {
-  background: #bca3ac;
-  color: white;
+  background: var(--color-secondary);
+  color: var(--color-white);
   border: none;
   padding: 8px 4px;
   border-radius: 6px;
@@ -165,21 +197,21 @@ main {
 }
 
 .btn-copy:hover {
-  background: #8f9491;
+  background: var(--color-primary);
 }
 
 .error-message {
-  background: #fee;
-  border: 2px solid #f88;
+  background: var(--color-error-bg);
+  border: 2px solid var(--color-error-border);
   border-radius: 8px;
   padding: 15px;
   margin-top: 20px;
-  color: #c00;
+  color: var(--color-error-text);
   text-align: center;
 }
 
 .recent-urls {
-  background: white;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
@@ -189,7 +221,7 @@ main {
 }
 
 .recent-urls h3 {
-  color: #8f9491;
+  color: var(--color-primary);
   margin-bottom: 20px;
   font-size: 1.5rem;
 }
@@ -200,24 +232,24 @@ main {
 }
 
 .url-table th {
-  background: #f3eaf4;
-  color: #8f9491;
+  background: var(--color-light);
+  color: var(--color-primary);
   padding: 12px;
   text-align: left;
-  border-bottom: 2px solid #eadde1;
+  border-bottom: 2px solid var(--color-border);
 }
 
 .url-table td {
   padding: 12px;
-  border-bottom: 1px solid #eadde1;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .url-table tr:hover {
-  background: #f3eaf4;
+  background: var(--color-light);
 }
 
 .url-table a {
-  color: #8f9491;
+  color: var(--color-primary);
   text-decoration: none;
   font-family: monospace;
 }
@@ -235,7 +267,7 @@ main {
 
 .no-urls {
   text-align: center;
-  color: #666;
+  color: var(--color-text-muted);
   padding: 40px;
   font-style: italic;
 }
@@ -243,12 +275,12 @@ main {
 .qr-code-section {
   margin-top: 25px;
   padding-top: 20px;
-  border-top: 1px solid #e1e4e8;
+  border-top: 1px solid var(--color-border);
   text-align: center;
 }
 
 .qr-code-section h4 {
-  color: #8f9491;
+  color: var(--color-primary);
   margin-bottom: 15px;
   font-size: 1.1rem;
 }
@@ -256,15 +288,15 @@ main {
 .qr-code-image {
   width: 200px;
   height: 200px;
-  border: 2px solid #eadde1;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   display: block;
   margin: 0 auto 10px;
-  background: white;
+  background: var(--color-white);
 }
 
 .qr-code-help {
-  color: #666;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -272,9 +304,9 @@ main {
 .qr-code-table {
   width: 40px;
   height: 40px;
-  border: 1px solid #eadde1;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: white;
+  background: var(--color-white);
 }
 
 /* Modal Styles */
@@ -291,7 +323,7 @@ main {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: var(--color-white);
   margin: 5% auto;
   padding: 0;
   border-radius: 12px;
@@ -317,8 +349,12 @@ main {
 }
 
 .modal-header {
-  background: linear-gradient(135deg, #bca3ac 0%, #e5cedc 100%);
-  color: white;
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary) 0%,
+    var(--color-tertiary) 100%
+  );
+  color: var(--color-white);
   padding: 20px 30px;
   display: flex;
   justify-content: space-between;
@@ -333,7 +369,7 @@ main {
 }
 
 .close {
-  color: white;
+  color: var(--color-white);
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
@@ -374,7 +410,7 @@ main {
 }
 
 .info-row strong {
-  color: #8f9491;
+  color: var(--color-primary);
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -384,16 +420,16 @@ main {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #f3eaf4;
+  background: var(--color-light);
   padding: 12px 15px;
   border-radius: 8px;
-  border: 1px solid #eadde1;
+  border: 1px solid var(--color-border);
 }
 
 .url-display a {
   font-family: monospace;
   font-weight: bold;
-  color: #8f9491;
+  color: var(--color-primary);
   flex: 1;
   word-break: break-all;
   text-decoration: none;
@@ -401,13 +437,13 @@ main {
 }
 
 .url-display a:hover {
-  color: #bca3ac;
+  color: var(--color-secondary);
   text-decoration: underline;
 }
 
 .btn-copy-modal {
-  background: #bca3ac;
-  color: white;
+  background: var(--color-secondary);
+  color: var(--color-white);
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
@@ -419,17 +455,17 @@ main {
 }
 
 .btn-copy-modal:hover {
-  background: #8f9491;
+  background: var(--color-primary);
 }
 
 .original-url {
-  background: #f3eaf4;
+  background: var(--color-light);
   padding: 13px 15px;
   border-radius: 8px;
-  border: 2px solid #eadde1;
+  border: 2px solid var(--color-border);
   word-break: break-all;
   font-size: 0.95rem;
-  color: #555;
+  color: var(--color-text-light);
   box-sizing: border-box;
   width: 100%;
   height: 50px;
@@ -440,14 +476,14 @@ main {
 
 .modal-qr {
   text-align: center;
-  background: #f3eaf4;
+  background: var(--color-light);
   padding: 25px;
   border-radius: 12px;
-  border: 2px solid #eadde1;
+  border: 2px solid var(--color-border);
 }
 
 .modal-qr h3 {
-  color: #8f9491;
+  color: var(--color-primary);
   margin: 0 0 15px 0;
   font-size: 1.2rem;
 }
@@ -455,11 +491,11 @@ main {
 .qr-code-modal {
   width: 200px;
   height: 200px;
-  border: 2px solid #white;
+  border: 2px solid var(--color-white);
   border-radius: 8px;
   display: block;
   margin: 0 auto 10px;
-  background: white;
+  background: var(--color-white);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -470,13 +506,13 @@ main {
 }
 
 .clickable-row:hover {
-  background-color: #f3eaf4 !important;
+  background-color: var(--color-light) !important;
 }
 
 /* Edit form styles */
 .btn-edit {
-  background: #bca3ac;
-  color: white;
+  background: var(--color-secondary);
+  color: var(--color-white);
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
@@ -486,7 +522,7 @@ main {
 }
 
 .btn-edit:hover {
-  background: #8f9491;
+  background: var(--color-primary);
 }
 
 .edit-url-container {
@@ -500,21 +536,21 @@ main {
 .edit-url-input {
   padding: 13px 15px;
   font-size: 0.95rem;
-  border: 2px solid #eadde1;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   transition: border-color 0.3s ease;
   font-family: inherit;
   box-sizing: border-box;
   width: 100%;
   height: 50px;
-  background: #f3eaf4;
+  background: var(--color-light);
   line-height: 24px;
   margin: 0;
 }
 
 .edit-url-input:focus {
   outline: none;
-  border-color: #bca3ac;
+  border-color: var(--color-secondary);
 }
 
 .edit-buttons {
@@ -523,8 +559,8 @@ main {
 }
 
 .btn-save {
-  background: #bca3ac;
-  color: white;
+  background: var(--color-secondary);
+  color: var(--color-white);
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
@@ -535,17 +571,17 @@ main {
 }
 
 .btn-save:hover:not(:disabled) {
-  background: #8f9491;
+  background: var(--color-primary);
 }
 
 .btn-save:disabled {
-  background: #ccc;
+  background: var(--color-disabled);
   cursor: not-allowed;
 }
 
 .btn-cancel {
-  background: #8f9491;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-white);
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
@@ -555,11 +591,11 @@ main {
 }
 
 .btn-cancel:hover:not(:disabled) {
-  background: #6c757d;
+  background: var(--color-hover-dark);
 }
 
 .btn-cancel:disabled {
-  background: #ccc;
+  background: var(--color-disabled);
   cursor: not-allowed;
 }
 
@@ -590,9 +626,9 @@ main {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success-text);
   padding: 10px 15px;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -602,7 +638,7 @@ main {
 .success-icon {
   font-weight: bold;
   font-size: 1.1rem;
-  color: #28a745;
+  color: var(--color-success-icon);
 }
 
 @keyframes fadeInSuccess {
@@ -676,20 +712,20 @@ main {
 }
 
 .features {
-  background: #f8f9fa;
+  background: var(--color-light);
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 30px;
 }
 
 .features h3 {
-  color: #8f9491;
+  color: var(--color-primary);
   margin-bottom: 15px;
 }
 
 .features ul {
   list-style-position: inside;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .features li {
@@ -698,8 +734,12 @@ main {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #bca3ac 0%, #e5cedc 100%);
-  color: white;
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary) 0%,
+    var(--color-tertiary) 100%
+  );
+  color: var(--color-white);
   border: none;
   padding: 12px 30px;
   font-size: 1rem;
@@ -718,7 +758,7 @@ main {
 footer {
   text-align: center;
   padding: 20px;
-  color: white;
+  color: var(--color-white);
   margin-top: 40px;
 }
 
@@ -752,7 +792,7 @@ footer {
 }
 
 .login-card {
-  background: white;
+  background: var(--color-white);
   border-radius: 12px;
   padding: 40px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -762,14 +802,14 @@ footer {
 }
 
 .login-card h2 {
-  color: #8f9491;
+  color: var(--color-primary);
   margin-bottom: 10px;
   font-size: 2rem;
   text-align: center;
 }
 
 .login-card p {
-  color: #666;
+  color: var(--color-text-muted);
   margin-bottom: 30px;
   text-align: center;
 }
@@ -780,7 +820,7 @@ footer {
 
 .form-field label {
   display: block;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 8px;
   font-weight: 500;
 }
@@ -789,14 +829,14 @@ footer {
   width: 100%;
   padding: 12px 16px;
   font-size: 1rem;
-  border: 2px solid #eadde1;
+  border: 2px solid var(--color-border);
   border-radius: 8px;
   transition: border-color 0.3s ease;
 }
 
 .login-input:focus {
   outline: none;
-  border-color: #bca3ac;
+  border-color: var(--color-secondary);
 }
 
 .btn-login {
@@ -805,12 +845,12 @@ footer {
 }
 
 .info-message {
-  background: #d4edda;
-  border: 2px solid #c3e6cb;
+  background: var(--color-success-bg);
+  border: 2px solid var(--color-success-border);
   border-radius: 8px;
   padding: 15px;
   margin-top: 20px;
-  color: #155724;
+  color: var(--color-success-text);
   text-align: center;
 }
 
