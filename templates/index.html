@@ -26,10 +26,10 @@
           <form id="url-form" action="/shorten" method="POST">
             <div class="form-group">
               <input
-                type="url"
+                type="text"
                 name="url"
                 id="url-input"
-                placeholder="https://example.com/your-long-url"
+                placeholder="example.com/your-long-url"
                 required
                 class="url-input"
               />
@@ -142,7 +142,7 @@
                   <form id="updateUrlForm" onsubmit="updateUrl(event)">
                     <div class="edit-url-container">
                       <input type="hidden" id="editShortHash" name="short_hash">
-                      <input type="url" id="editUrlInput" name="new_url" class="edit-url-input" placeholder="https://example.com" required>
+                      <input type="text" id="editUrlInput" name="new_url" class="edit-url-input" placeholder="example.com" required>
                       <div class="edit-buttons">
                         <button type="submit" class="btn-save">Save</button>
                         <button type="button" onclick="cancelEdit()" class="btn-cancel">Cancel</button>
