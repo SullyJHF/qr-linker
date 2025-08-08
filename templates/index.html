@@ -83,9 +83,9 @@
             </thead>
             <tbody>
               {{range .URLs}}
-              <tr>
+              <tr class="clickable-row" onclick="showModal('{{.ShortHash}}', '{{.FullURL}}', '{{.Clicks}}', '{{.CreatedAt.Format "Jan 02, 2006"}}', '{{$.Host}}')">
                 <td>
-                  <a href="/{{.ShortHash}}" target="_blank">/{{.ShortHash}}</a>
+                  <a href="/{{.ShortHash}}" target="_blank" onclick="event.stopPropagation()">/{{.ShortHash}}</a>
                 </td>
                 <td class="truncate">{{.FullURL}}</td>
                 <td>{{.Clicks}}</td>
@@ -107,6 +107,56 @@
         </div>
       </main>
 
+      <!-- Modal -->
+      <div id="urlModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>URL Details</h2>
+            <span class="close">&times;</span>
+          </div>
+          <div class="modal-body">
+            <div class="modal-info">
+              <div class="info-row">
+                <strong>Short URL:</strong>
+                <div class="url-display">
+                  <a id="modalShortUrl" href="" target="_blank" rel="noopener"></a>
+                  <button
+                    onclick="copyToClipboard(document.getElementById('modalShortUrl').textContent, this)"
+                    class="btn-copy-modal"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="info-row">
+                <strong>Original URL:</strong>
+                <div class="original-url" id="modalOriginalUrl"></div>
+              </div>
+              <div class="info-row">
+                <strong>Clicks:</strong>
+                <span id="modalClicks"></span>
+              </div>
+              <div class="info-row">
+                <strong>Created:</strong>
+                <span id="modalCreated"></span>
+              </div>
+            </div>
+            <div class="modal-qr">
+              <h3>QR Code</h3>
+              <img
+                id="modalQrCode"
+                src=""
+                alt="QR Code"
+                class="qr-code-modal"
+              />
+              <p class="qr-code-help">
+                Scan with your phone to access the link
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <script>
         function copyToClipboard(text, button) {
           navigator.clipboard
@@ -126,6 +176,51 @@
               }, 2000);
             });
         }
+
+        // Modal functionality
+        const modal = document.getElementById("urlModal");
+        const closeBtn = document.getElementsByClassName("close")[0];
+
+        function showModal(shortHash, originalUrl, clicks, created, baseUrl) {
+          const shortUrl = baseUrl + "/" + shortHash;
+
+          const modalShortUrlElement = document.getElementById("modalShortUrl");
+          modalShortUrlElement.textContent = shortUrl;
+          modalShortUrlElement.href = shortUrl;
+          
+          document.getElementById("modalOriginalUrl").textContent = originalUrl;
+          document.getElementById("modalClicks").textContent = clicks;
+          document.getElementById("modalCreated").textContent = created;
+          document.getElementById("modalQrCode").src = "/qr/" + shortHash;
+
+          // Disable background scrolling
+          document.body.style.overflow = "hidden";
+          
+          modal.style.display = "block";
+        }
+
+        function closeModal() {
+          // Re-enable background scrolling
+          document.body.style.overflow = "";
+          modal.style.display = "none";
+        }
+
+        closeBtn.onclick = function () {
+          closeModal();
+        };
+
+        window.onclick = function (event) {
+          if (event.target === modal) {
+            closeModal();
+          }
+        };
+
+        // Close modal with Escape key
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal.style.display === "block") {
+            closeModal();
+          }
+        });
       </script>
 
       <footer>
