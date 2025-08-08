@@ -16,6 +16,13 @@ type URL struct {
 	Clicks    int       `json:"clicks"`
 }
 
+type User struct {
+	ID           int       `json:"id"`
+	Username     string    `json:"username"`
+	PasswordHash string    `json:"-"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
 type DB struct {
 	conn *sql.DB
 }
@@ -49,6 +56,15 @@ func (db *DB) createTables() error {
 	);
 
 	CREATE INDEX IF NOT EXISTS idx_short_hash ON urls(short_hash);
+
+	CREATE TABLE IF NOT EXISTS users (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		username TEXT NOT NULL UNIQUE,
+		password_hash TEXT NOT NULL,
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+	);
+
+	CREATE INDEX IF NOT EXISTS idx_username ON users(username);
 	`
 
 	_, err := db.conn.Exec(query)
@@ -162,4 +178,72 @@ func (db *DB) CheckHashExists(shortHash string) (bool, error) {
 	var exists bool
 	err := db.conn.QueryRow(query, shortHash).Scan(&exists)
 	return exists, err
+}
+
+func (db *DB) CreateUser(username, passwordHash string) (*User, error) {
+	query := `
+		INSERT INTO users (username, password_hash, created_at)
+		VALUES (?, ?, ?)
+	`
+
+	result, err := db.conn.Exec(query, username, passwordHash, time.Now())
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	return &User{
+		ID:           int(id),
+		Username:     username,
+		PasswordHash: passwordHash,
+		CreatedAt:    time.Now(),
+	}, nil
+}
+
+func (db *DB) GetUserByUsername(username string) (*User, error) {
+	query := `
+		SELECT id, username, password_hash, created_at
+		FROM users
+		WHERE username = ?
+	`
+
+	var user User
+	err := db.conn.QueryRow(query, username).Scan(
+		&user.ID,
+		&user.Username,
+		&user.PasswordHash,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (db *DB) GetUserByID(id int) (*User, error) {
+	query := `
+		SELECT id, username, password_hash, created_at
+		FROM users
+		WHERE id = ?
+	`
+
+	var user User
+	err := db.conn.QueryRow(query, id).Scan(
+		&user.ID,
+		&user.Username,
+		&user.PasswordHash,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }

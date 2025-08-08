@@ -1,10 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"embed"
 	"html/template"
 	"log"
 	"net/http"
+	"qr-linker/auth"
 	"qr-linker/database"
 	"qr-linker/utils"
 	"strings"
@@ -23,6 +25,13 @@ type PageData struct {
 	ShortURL  string
 	Host      string
 	Error     string
+	Username  string
+}
+
+type LoginData struct {
+	Title   string
+	Error   string
+	Message string
 }
 
 var db *database.DB
@@ -35,11 +44,24 @@ func main() {
 	}
 	defer db.Close()
 
-	http.HandleFunc("/", routeHandler)
-	http.HandleFunc("/shorten", shortenHandler)
+	// Create default admin user if none exists
+	if err := auth.CreateDefaultUser(db); err != nil {
+		log.Printf("Warning: Could not create default user: %v", err)
+	} else {
+		log.Println("Default admin user created (username: admin, password: admin123)")
+	}
+
+	// Public routes
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/logout", logoutHandler)
 	http.Handle("/static/", http.FileServer(http.FS(staticFS)))
 
+	// Protected routes
+	http.HandleFunc("/", auth.RequireAuth(routeHandler))
+	http.HandleFunc("/shorten", auth.RequireAuth(shortenHandler))
+
 	log.Println("Server starting on http://localhost:8080")
+	log.Println("Default credentials - Username: admin, Password: admin123")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
@@ -76,10 +98,14 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		urls = []database.URL{}
 	}
 
+	// Get username from session
+	_, username, _ := auth.GetUserFromSession(r)
+
 	data := PageData{
-		Title: "QR Linker - URL Shortener",
-		URLs:  urls,
-		Host:  "http://localhost:8080",
+		Title:    "QR Linker - URL Shortener",
+		URLs:     urls,
+		Host:     "http://localhost:8080",
+		Username: username,
 	}
 
 	// Check for success parameter
@@ -95,6 +121,101 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if err := tmpl.Execute(w, data); err != nil {
 		log.Printf("Render error: %v", err)
 	}
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		// Check if already authenticated
+		if auth.IsAuthenticated(r) {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+
+		tmpl, err := template.ParseFS(templatesFS, "templates/login.html")
+		if err != nil {
+			http.Error(w, "Error loading template", http.StatusInternalServerError)
+			return
+		}
+
+		data := LoginData{
+			Title: "Login - QR Linker",
+		}
+
+		tmpl.Execute(w, data)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		err := r.ParseForm()
+		if err != nil {
+			renderLoginError(w, "Invalid form data")
+			return
+		}
+
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+
+		if username == "" || password == "" {
+			renderLoginError(w, "Username and password are required")
+			return
+		}
+
+		// Get user from database
+		user, err := db.GetUserByUsername(username)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				renderLoginError(w, "Invalid username or password")
+			} else {
+				log.Printf("Database error: %v", err)
+				renderLoginError(w, "An error occurred. Please try again.")
+			}
+			return
+		}
+
+		// Check password
+		if !auth.CheckPasswordHash(password, user.PasswordHash) {
+			renderLoginError(w, "Invalid username or password")
+			return
+		}
+
+		// Set session
+		err = auth.SetUserSession(w, r, user.ID, user.Username)
+		if err != nil {
+			log.Printf("Session error: %v", err)
+			renderLoginError(w, "Failed to create session")
+			return
+		}
+
+		// Redirect to home
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+}
+
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	err := auth.ClearSession(w, r)
+	if err != nil {
+		log.Printf("Error clearing session: %v", err)
+	}
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
+
+func renderLoginError(w http.ResponseWriter, errorMsg string) {
+	tmpl, err := template.ParseFS(templatesFS, "templates/login.html")
+	if err != nil {
+		http.Error(w, "Error loading template", http.StatusInternalServerError)
+		return
+	}
+
+	data := LoginData{
+		Title: "Login - QR Linker",
+		Error: errorMsg,
+	}
+
+	tmpl.Execute(w, data)
 }
 
 func shortenHandler(w http.ResponseWriter, r *http.Request) {

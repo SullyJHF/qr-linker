@@ -27,6 +27,7 @@ header {
   text-align: center;
   margin-bottom: 40px;
   padding-top: 40px;
+  position: relative;
 }
 
 header h1 {
@@ -34,6 +35,36 @@ header h1 {
   font-size: 3rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   animation: fadeInDown 0.8s ease;
+}
+
+.user-info {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 20px;
+  border-radius: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info span {
+  color: #333;
+}
+
+.btn-logout {
+  background: #dc3545;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: #c82333;
 }
 
 main {
@@ -276,9 +307,85 @@ footer {
   }
 }
 
+.login-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  animation: fadeInUp 0.8s ease;
+}
+
+.login-card h2 {
+  color: #667eea;
+  margin-bottom: 10px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.login-card p {
+  color: #666;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  display: block;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid #e1e4e8;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.btn-login {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.info-message {
+  background: #d4edda;
+  border: 2px solid #c3e6cb;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  color: #155724;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   header h1 {
     font-size: 2rem;
+  }
+
+  .user-info {
+    position: static;
+    margin-top: 20px;
+    border-radius: 12px;
   }
 
   .url-shortener-card {
@@ -300,5 +407,9 @@ footer {
 
   .url-table {
     font-size: 0.9rem;
+  }
+
+  .login-card {
+    padding: 30px 20px;
   }
 }

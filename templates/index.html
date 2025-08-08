@@ -10,6 +10,12 @@
     <div class="container">
       <header>
         <h1>{{.Title}}</h1>
+        {{if .Username}}
+        <div class="user-info">
+          <span>Logged in as: <strong>{{.Username}}</strong></span>
+          <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+        {{end}}
       </header>
 
       <main>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - QR Linker</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>QR Linker</h1>
+      </header>
+
+      <main class="login-main">
+        <div class="login-card">
+          <h2>Login</h2>
+          <p>Please login to access the URL shortener</p>
+
+          <form id="login-form" action="/login" method="POST">
+            <div class="form-field">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                required
+                autofocus
+                class="login-input"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                required
+                class="login-input"
+              />
+            </div>
+
+            <button type="submit" class="btn-primary btn-login">Login</button>
+          </form>
+
+          {{if .Error}}
+          <div class="error-message">
+            <p>{{.Error}}</p>
+          </div>
+          {{end}} {{if .Message}}
+          <div class="info-message">
+            <p>{{.Message}}</p>
+          </div>
+          {{end}}
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 QR Linker.</p>
+      </footer>
+    </div>
+  </body>
+</html>
